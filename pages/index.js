@@ -7,7 +7,7 @@ const DUMMY_MEETUPS = [{
     address: 'Minsk, Oxford street 5',
     description: 'First meetup!'
 }, {
-    id: 'm1',
+    id: 'm2',
     title: 'A First Meetup',
     image: 'https://cdn.mos.cms.futurecdn.net/pD3bsKPrjsqNiFDGRL5oq6.jpg',
     address: 'Gomel, Oxford street 10, 456789',
@@ -18,13 +18,26 @@ function HomePage(props) {
     return <MeetupList meetups={props.meetups}/>;
 }
 
-
+// export async function getServerSideProps(context) {
+//
+//     const req = context.req;
+//     const res = context.res;
+//
+//     //fetch data from an API
+//
+//     return {
+//         props: {
+//             meetups: DUMMY_MEETUPS
+//         }
+//     };
+// }
 
 export async function getStaticProps() {
     return {
         props: {
             meetups: DUMMY_MEETUPS
-        }
+        },
+        revalidate: 10
     };
 }
 
