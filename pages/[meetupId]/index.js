@@ -1,21 +1,32 @@
 import MeetupDetail from "../../components/meetups/MeetupDetail";
 import {MongoClient, ObjectId} from "mongodb";
+import {Fragment} from "react";
+import Head from "next/head";
 
 
 function MeetupDetails(props) {
     return (
-        <MeetupDetail
-            img={props.meetupData.image}
-            title={props.meetupData.title}
-            address={props.meetupData.address}
-            description={props.meetupData.description}
-        />
+        <Fragment>
+            <Head>
+                <title>{props.meetupData.title}</title>
+                <meta name='description' content={props.meetupData.description} />
+            </Head>
+            <MeetupDetail
+                img={props.meetupData.image}
+                title={props.meetupData.title}
+                address={props.meetupData.address}
+                description={props.meetupData.description}
+            />
+        </Fragment>
     );
 }
 
 export async function getStaticPaths() {
 
-    const client = await MongoClient.connect('mongodb+srv://Yeliazar:qwert22y@cluster0.ltqc0c9.mongodb.net/meetups?retryWrites=true&w=majority');
+    const client = await MongoClient.connect(
+        'mongodb+srv://Yeliazar:qwert22y@cluster0.ltqc0c9.mongodb.net/meetups?retryWrites=true&w=majority'
+    );
+
     const db = client.db();
 
     const meetupsCollection = db.collection('meetups');
@@ -24,7 +35,6 @@ export async function getStaticPaths() {
 
     await client.close();
 
-    console.log(meetups)
 
     return {
         fallback: 'blocking',
@@ -45,7 +55,7 @@ export async function getStaticProps(context) {
 
     const meetupsCollection = db.collection('meetups');
 
-    const selectedMeetup = meetupsCollection.findOne({
+    const selectedMeetup = await meetupsCollection.findOne({
         _id: ObjectId(meetupId),
     });
 
@@ -58,7 +68,7 @@ export async function getStaticProps(context) {
     return {
         props: {
             meetupData: {
-                id: selectedMeetup._id,
+                id: selectedMeetup._id.toString(),
                 title: selectedMeetup.title,
                 address: selectedMeetup.address,
                 image: selectedMeetup.image,
