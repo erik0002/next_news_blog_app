@@ -2,7 +2,11 @@
     text-align: center;
 }
 
+.detail img {
+    max-height: 75%;
+    max-width: 75%;
+}
+
 .detail {
     width: 100%;
-
 }
